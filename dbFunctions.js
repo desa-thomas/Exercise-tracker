@@ -36,9 +36,6 @@ function createExercise(
   date,
   done
 ) {
-  //if date field is null, set it to current date
-  let exercise;
-
   User.findById(id, function (err, user) {
     if (err) {
       done(err, null, null);
@@ -47,6 +44,8 @@ function createExercise(
 
     //if user exists in db
     if (user) {
+      let exercise;
+
       //if date was given
       if (date) {
         let d = date.split("-")
