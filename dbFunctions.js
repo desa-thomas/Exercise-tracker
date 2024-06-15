@@ -49,11 +49,15 @@ function createExercise(
     if (user) {
       //if date was given
       if (date) {
+        let d = date.split("-")
+        let dateObj = new Date(Number(d[0]), Number(d[1])-1, Number(d[2]))
+
         exercise = new Exercise({
           user_id: id,
           description: description,
           duration: duration,
-          date: date,
+          dateObj: dateObj,
+          date: dateObj.toDateString()
         });
       } else {
         exercise = new Exercise({
@@ -117,14 +121,14 @@ function getLog(User, Exercise, id, queryParam, done){
       //If no query parameters (from, to, limit)
 
         let query = Exercise.find({user_id: id})
-        .select({_id: 0, user_id: 0, __v: 0})
+        .select({_id: 0, user_id: 0, __v: 0, dateObj: 0})
 
         if(queryParam){
           if(queryParam.from){
-            query.where("date").gte(queryParam.from)
+            query.where("dateObj").gte(queryParam.from)
           }
           if(queryParam.to){
-            query.where("date").lte(queryParam.to)
+            query.where("dateObj").lte(queryParam.to)
           }
           if(queryParam.limit){
             query.limit(Number(queryParam.limit))

@@ -30,7 +30,8 @@ let exerciseSchema = new mongoose.Schema({
   user_id: { required: true, type: String },
   description: { required: true, type: String },
   duration: { required: true, type: Number },
-  date: { type: Date, default: Date.now },
+  dateObj: { type: Date, default: Date.now },
+  date: {type: String, default: new Date().toDateString()}
 });
 
 //Creating User and Exercise models
@@ -66,12 +67,13 @@ app.route("/api/users/:_id/exercises").post(function (req, res) {
 
     function (err, user, exercise) {
       if (err) {
-        res.send(err);
+        res.status(400).send(err)
+
       } else {
         res.json({
           _id: user._id,
           username: user.username,
-          date: exercise.date.toDateString(),
+          date: exercise.date,
           duration: exercise.duration,
           description: exercise.description,
         });
